@@ -1,7 +1,8 @@
 import { useState } from "react";
+import './TaskForm.css';
 export default function TaskForm({onTaskCreated}) {
     const[title, setTitle] = useState('');
-    const [description, setDescriprion] = useState('')
+    const [description, setDescriprion] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
