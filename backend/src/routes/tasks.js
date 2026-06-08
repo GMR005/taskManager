@@ -34,7 +34,7 @@ router.put ('/:id', async (req, res) => {
         const {id} = req.params;
         const {status} = req.body;
         const result = await pool.query (
-            'UPDATE tasks SET status = 1$ where id = 2$ RETURNING *',
+            'UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *',
             [status, id]
         );
         if (result.rows.length===0) {
@@ -56,6 +56,7 @@ router.delete('/:id', async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({error: 'задача не найдена'});
         }
+        res.json({ message: 'Task deleted', task: result.rows[0] });
     } catch (err) {
         res.status(500).json({error: err.message});
     }
