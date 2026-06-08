@@ -1,3 +1,5 @@
+import './TaskList.css'
+
 export default function TaskRow({ task, onUpdate }) {
   const handleStatusChange = async (e) => {
     await fetch(`/tasks/${task.id}`, {
