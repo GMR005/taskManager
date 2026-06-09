@@ -1,3 +1,11 @@
+table {
+  overflow: visible;
+}
+
+.task-row {
+  position: relative;
+}
+
 select {
   padding: 6px 10px;
   border: 2px solid #bfdbfe;
@@ -13,10 +21,13 @@ select:focus {
   border-color: #2563eb;
 }
 
-.delete-cell {
-  position: relative;
-  text-align: center;
-  min-width: 100px;
+.action-cell {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  border: none;
 }
 
 .delete-btn {
@@ -25,8 +36,8 @@ select:focus {
   color: #9ca3af;
   font-size: 16px;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
   transition: all 0.2s;
 }
 
@@ -37,7 +48,7 @@ select:focus {
 
 .confirm-panel {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -46,10 +57,10 @@ select:focus {
   background: white;
   border: 2px solid #ef4444;
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 20;
   font-size: 13px;
   color: #374151;
 }

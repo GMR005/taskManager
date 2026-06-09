@@ -21,12 +21,11 @@ export default function TaskList() {
           <th>Описание</th>
           <th>Статус</th>
           <th>Создана</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         {tasks.length === 0 ? (
-          <tr><td colSpan={5}>Нет задач</td></tr>
+          <tr><td colSpan={4}>Нет задач</td></tr>
         ) : (
           tasks.map(task => (
             <TaskRow key={task.id} task={task} onUpdate={fetchTasks} />

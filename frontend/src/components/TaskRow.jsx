@@ -20,7 +20,7 @@ export default function TaskRow({ task, onUpdate }) {
   }
 
   return (
-    <tr>
+    <tr className="task-row">
       <td>{task.title}</td>
       <td>{task.description}</td>
       <td>
@@ -31,14 +31,16 @@ export default function TaskRow({ task, onUpdate }) {
         </select>
       </td>
       <td>{new Date(task.created_at).toLocaleDateString()}</td>
-      <td className="delete-cell">
-        <button className="delete-btn" onClick={() => setShowConfirm(true)}>✕</button>
-        {showConfirm && (
+
+      <td className="action-cell">
+        {showConfirm ? (
           <div className="confirm-panel">
             <span>Удалить задачу?</span>
             <button className="confirm-yes" onClick={handleDelete}>Да</button>
             <button className="confirm-no" onClick={() => setShowConfirm(false)}>Нет</button>
           </div>
+        ) : (
+          <button className="delete-btn" onClick={() => setShowConfirm(true)}>✕</button>
         )}
       </td>
     </tr>
