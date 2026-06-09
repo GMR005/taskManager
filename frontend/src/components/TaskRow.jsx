@@ -1,4 +1,4 @@
-import './TaskList.css'
+import './TaskRow.css'
 
 export default function TaskRow({ task, onUpdate }) {
   const handleStatusChange = async (e) => {

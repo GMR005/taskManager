@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import TaskRow from "./TaskRow"
+import './TaskList.css'
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([])
