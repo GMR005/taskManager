@@ -5,7 +5,7 @@ form {
   margin-top: 16px;
   padding: 20px;
   background: #f8faff;
-  border: 2px solid #bfdbfe;
+  border: 2px solid #3b72eb;
   border-radius: 10px;
 }
 
@@ -54,4 +54,5 @@ input:focus {
 
 .cancel-btn:hover {
   background: #d1d5db;
+  background: #0056b3;
 }

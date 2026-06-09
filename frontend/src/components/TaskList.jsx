@@ -14,24 +14,26 @@ export default function TaskList() {
   useEffect(() => { fetchTasks() }, [])
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Название</th>
-          <th>Описание</th>
-          <th>Статус</th>
-          <th>Создана</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tasks.length === 0 ? (
-          <tr><td colSpan={4}>Нет задач</td></tr>
-        ) : (
-          tasks.map(task => (
-            <TaskRow key={task.id} task={task} onUpdate={fetchTasks} />
-          ))
-        )}
-      </tbody>
-    </table>
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Статус</th>
+            <th>Создана</th>
+            <th className="th-x"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.length === 0 ? (
+            <tr><td colSpan={4}>Нет задач</td></tr>
+          ) : (
+            tasks.map(task => (
+              <TaskRow key={task.id} task={task} onUpdate={fetchTasks} />
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
   )
 }

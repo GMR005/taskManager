@@ -1,3 +1,7 @@
+.table-wrap {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -15,6 +19,10 @@ th {
   color: white;
   font-weight: 600;
   font-size: 14px;
+}
+
+.th-x {
+  width: 40px;
 }
 
 td {
