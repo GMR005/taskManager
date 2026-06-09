@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import './TaskRow.css'
 
 export default function TaskRow({ task, onUpdate }) {
+  const [showConfirm, setShowConfirm] = useState(false)
+
   const handleStatusChange = async (e) => {
     await fetch(`/tasks/${task.id}`, {
       method: 'PUT',
@@ -12,6 +15,7 @@ export default function TaskRow({ task, onUpdate }) {
 
   const handleDelete = async () => {
     await fetch(`/tasks/${task.id}`, { method: 'DELETE' })
+    setShowConfirm(false)
     onUpdate()
   }
 
@@ -27,7 +31,16 @@ export default function TaskRow({ task, onUpdate }) {
         </select>
       </td>
       <td>{new Date(task.created_at).toLocaleDateString()}</td>
-      <td><button onClick={handleDelete}>Удалить</button></td>
+      <td className="delete-cell">
+        <button className="delete-btn" onClick={() => setShowConfirm(true)}>✕</button>
+        {showConfirm && (
+          <div className="confirm-panel">
+            <span>Удалить задачу?</span>
+            <button className="confirm-yes" onClick={handleDelete}>Да</button>
+            <button className="confirm-no" onClick={() => setShowConfirm(false)}>Нет</button>
+          </div>
+        )}
+      </td>
     </tr>
   )
 }

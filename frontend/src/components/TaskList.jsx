@@ -21,7 +21,7 @@ export default function TaskList() {
           <th>Описание</th>
           <th>Статус</th>
           <th>Создана</th>
-          <th>Действия</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
