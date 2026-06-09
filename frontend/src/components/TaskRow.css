@@ -1,16 +1,25 @@
 select {
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border: 2px solid #bfdbfe;
+  border-radius: 6px;
   font-size: 13px;
+  outline: none;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+select:focus {
+  border-color: #2563eb;
 }
 
 td button {
-  background: #dc3545;
-  padding: 4px 12px;
+  background: #ef4444;
+  padding: 6px 14px;
   font-size: 13px;
+  font-weight: 500;
 }
 
 td button:hover {
-  background: #c82333;
+  background: #dc2626;
 }
