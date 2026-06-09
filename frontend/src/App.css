@@ -6,3 +6,22 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
 }
+
+.add-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}

@@ -1,8 +1,12 @@
 form {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 20px;
+  background: #f8faff;
+  border: 2px solid #bfdbfe;
+  border-radius: 10px;
 }
 
 input {
@@ -18,15 +22,14 @@ input:focus {
   border-color: #2563eb;
 }
 
-input[type="text"] {
-  flex: 1;
-  min-width: 200px;
+.form-actions {
+  display: flex;
+  gap: 10px;
 }
 
-button {
+.form-actions button {
+  flex: 1;
   padding: 10px 20px;
-  background: #2563eb;
-  color: white;
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -35,6 +38,20 @@ button {
   transition: background 0.2s;
 }
 
-button:hover {
+.form-actions button[type="submit"] {
+  background: #2563eb;
+  color: white;
+}
+
+.form-actions button[type="submit"]:hover {
   background: #1d4ed8;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.cancel-btn:hover {
+  background: #d1d5db;
 }

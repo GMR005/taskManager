@@ -1,7 +1,7 @@
 import { useState } from "react";
 import './TaskForm.css';
 
-export default function TaskForm({ onTaskCreated }) {
+export default function TaskForm({ onTaskCreated, onCancel }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -33,7 +33,10 @@ export default function TaskForm({ onTaskCreated }) {
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Описание (необязательно)"
       />
-      <button type="submit">Создать</button>
+      <div className="form-actions">
+        <button type="submit">Создать</button>
+        <button type="button" className="cancel-btn" onClick={onCancel}>Отмена</button>
+      </div>
     </form>
   )
 }
