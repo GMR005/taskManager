@@ -14,11 +14,30 @@ select {
   outline: none;
   background: white;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  font-weight: 600;
 }
 
 select:focus {
   border-color: #2563eb;
+}
+
+.status-new {
+  color: #2563eb;
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.status-in_progress {
+  color: #ca8a04;
+  border-color: #ca8a04;
+  background: #fefce8;
+}
+
+.status-done {
+  color: #16a34a;
+  border-color: #16a34a;
+  background: #f0fdf4;
 }
 
 .action-cell {

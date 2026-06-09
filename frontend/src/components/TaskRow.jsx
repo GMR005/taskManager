@@ -24,10 +24,10 @@ export default function TaskRow({ task, onUpdate }) {
       <td>{task.title}</td>
       <td>{task.description}</td>
       <td>
-        <select value={task.status} onChange={handleStatusChange}>
-          <option value="new">new</option>
-          <option value="in_progress">in_progress</option>
-          <option value="done">done</option>
+        <select className={`status-${task.status}`} value={task.status} onChange={handleStatusChange}>
+          <option value="new">Новая</option>
+          <option value="in_progress">Выполняется</option>
+          <option value="done">Закончена</option>
         </select>
       </td>
       <td>{new Date(task.created_at).toLocaleDateString()}</td>
