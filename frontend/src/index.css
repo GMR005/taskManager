@@ -1,6 +1,7 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, Arial, sans-serif;
+  background: #f0f4ff;
 }
 
 * {
