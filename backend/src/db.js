@@ -25,7 +25,7 @@ const initDB = async () => {
             title VARCHAR(255) NOT NULL,
             description TEXT,
             status VARCHAR(20) DEFAULT 'new' CHECK (status IN ('new', 'in_progress', 'done')),
-            user_id INTEGER REFERENCES userd(id),
+            user_id INTEGER REFERENCES users(id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `)
