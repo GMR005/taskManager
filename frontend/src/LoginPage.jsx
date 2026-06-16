@@ -1,8 +1,9 @@
 import { useState } from "react";
-import {api, setToken} from './api';
+import {api, setToken, setEmail} from './api';
+import './LoginPage.css'
 
 export default function LoginPage({onLogin}) {
-  const [email, setEmail] = useState('');
+  const [email, setEmailState] = useState('');
   const [password, setPassword] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
@@ -15,16 +16,21 @@ export default function LoginPage({onLogin}) {
       setError('Заполни email и пароль');
       return;
     }
+    if (password.length < 6) {
+      setError('Пароль минимум 6 символов');
+      return;
+    }
     setLoading(true);
     try {
         const endpoint = isRegister ? '/auth/register' : '/auth/login';
 
-        const data = await api (endpoint, {
+        const data = await api(endpoint, {
             method: 'POST',
-            body: JSON.stringify({email, password}),
+            body: JSON.stringify({email: email.trim(), password}),
         })
 
         setToken(data.token);
+        setEmail(data.user.email);
         onLogin();
     } catch (err) {
         setError(err.message);
@@ -34,44 +40,50 @@ export default function LoginPage({onLogin}) {
   };
 
   return (
-    <div className="app" style={{ maxWidth: 400, margin: '50px auto' }}>
-      <h1>{isRegister ? 'Регистрация' : 'Вход'}</h1>
+    <div className="login-page">
+      <div className="login-card">
+        <h1>{isRegister ? 'Регистрация' : 'Вход'}</h1>
+        <p className="login-subtitle">
+          {isRegister ? 'Создайте аккаунт для управления задачами' : 'Войдите в свой аккаунт'}
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: '100%', marginBottom: 10, padding: 8 }}
-        />
-        <input
-          type="password"
-          placeholder="Пароль"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: '100%', marginBottom: 10, padding: 8 }}
-        />
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            className="login-input"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmailState(e.target.value)}
+          />
+          <input
+            className="login-input"
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
+          <button
+            className="login-btn"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? 'Загрузка...' : (isRegister ? 'Зарегистрироваться' : 'Войти')}
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ width: '100%', padding: 10 }}
-        >
-          {loading ? 'Загрузка...' : (isRegister ? 'Зарегистрироваться' : 'Войти')}
-        </button>
-      </form>
+        {error && (
+          <p className="login-error">{error}</p>
+        )}
 
-
-      {error && (
-        <p style={{ color: 'red', marginTop: 10 }}>{error}</p>
-      )}
-
-      <p style={{ marginTop: 15, cursor: 'pointer', color: 'blue' }}
-         onClick={() => { setIsRegister(!isRegister); setError(''); }}>
-        {isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
-      </p>
+        <p className="login-toggle">
+          {isRegister ? (
+            <>Уже есть аккаунт? <a onClick={() => { setIsRegister(false); setError(''); }}>Войти</a></>
+          ) : (
+            <>Нет аккаунта? <a onClick={() => { setIsRegister(true); setError(''); }}>Зарегистрироваться</a></>
+          )}
+        </p>
+      </div>
     </div>
   );
 }
