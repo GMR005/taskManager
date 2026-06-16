@@ -1,28 +1,92 @@
 .app {
   max-width: 800px;
-  margin: 40px auto 0;
-  padding: 24px;
+  margin: 40px auto;
+  padding: 0;
   background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.08);
+  overflow: hidden;
+}
 
-  border-radius: 12px;
-  box-shadow: 0 50px 50px 50px rgba(0, 0, 0, 0.08);
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.app-user-email {
+  font-size: 13px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.logout-btn {
+  padding: 8px 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: #374151;
+}
+
+.logout-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.app > .table-wrap,
+.app > form,
+.app > .add-btn {
+  margin: 24px;
 }
 
 .add-btn {
   display: block;
-  width: 100%;
-  margin-top: 16px;
+  width: calc(100% - 48px);
+  margin: 0 24px 24px;
   padding: 12px;
   background: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .add-btn:hover {
   background: #1d4ed8;
+}
+
+.add-btn:active {
+  transform: scale(0.99);
 }

@@ -2,20 +2,21 @@ import { useCallback, useState } from 'react'
 import TaskForm from './components/TaskForm'
 import TaskList from './components/TaskList'
 import LoginPage from './LoginPage'
-import {getToken, clearToken} from './api'
+import {getToken, getEmail, clearAuth} from './api'
 import './App.css'
 
 export default function App() {
-  const [token, setTokenState] = useState (getToken())
+  const [token, setTokenState] = useState(getToken())
   const [refreshKey, setRefreshKey] = useState(0)
   const [showForm, setShowForm] = useState(false)
+  const email = getEmail()
 
   const handleLogin = () => {
     setTokenState(getToken())
   }
 
   const handleLogout = () => {
-    clearToken()
+    clearAuth()
     setTokenState(null)
   }
 
@@ -30,12 +31,17 @@ export default function App() {
 
   return (
     <div className="app">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Task Manager</h1>
-        <button onClick={handleLogout} style={{ padding: '6px 16px' }}>
-          Выйти
-        </button>
-      </div>
+      <header className="app-header">
+        <div className="app-header-left">
+          <h1 className="app-title">Task Manager</h1>
+        </div>
+        <div className="app-header-right">
+          <span className="app-user-email">{email}</span>
+          <button className="logout-btn" onClick={handleLogout}>
+            Выйти
+          </button>
+        </div>
+      </header>
 
       <TaskList key={refreshKey} />
       {showForm ? (
