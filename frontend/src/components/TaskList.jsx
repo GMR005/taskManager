@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react"
 import TaskRow from "./TaskRow"
 import './TaskList.css'
+import { api } from "../api"
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([])
 
   const fetchTasks = async () => {
-    const res = await fetch('/tasks')
-    const data = await res.json()
-    setTasks(data)
+    try {
+        const data = await api('/tasks')
+        setTasks(data)
+    } catch {
+        setTasks([])
+    }
   }
 
   useEffect(() => { fetchTasks() }, [])

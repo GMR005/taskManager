@@ -24,7 +24,7 @@ router.post ('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const result = await pool.query (
-            'SELECT * FROM tasks WHERE user_id = 1$ ORDER BY created_at DESC',
+            'SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC',
             [req.userId]
         );
         res.json(result.rows);

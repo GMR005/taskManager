@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import './TaskRow.css'
+import { api } from '../api'
 
 export default function TaskRow({ task, onUpdate }) {
   const handleStatusChange = async (e) => {
-    await fetch(`/tasks/${task.id}`, {
+    await api(`/tasks/${task.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: e.target.value })
@@ -12,7 +13,7 @@ export default function TaskRow({ task, onUpdate }) {
   }
 
   const handleDelete = async () => {
-    await fetch(`/tasks/${task.id}`, { method: 'DELETE' })
+    await api(`/tasks/${task.id}`, { method: 'DELETE' })
     onUpdate()
   }
 

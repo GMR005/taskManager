@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './TaskForm.css';
+import { api } from "../api";
 
 export default function TaskForm({ onTaskCreated, onCancel }) {
   const [title, setTitle] = useState('');
@@ -9,7 +10,7 @@ export default function TaskForm({ onTaskCreated, onCancel }) {
     e.preventDefault();
     if (!title.trim()) return
 
-    await fetch('/tasks', {
+    await api('/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, description })
