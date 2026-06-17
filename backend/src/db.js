@@ -25,6 +25,8 @@ const initDB = async () => {
             title VARCHAR(255) NOT NULL,
             description TEXT,
             status VARCHAR(20) DEFAULT 'new' CHECK (status IN ('new', 'in_progress', 'done')),
+            priority VARCHAR(20) DEFAULT 'medium',
+            category VARCHAR(50) DEFAULT 'other',
             user_id INTEGER REFERENCES users(id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
@@ -39,6 +41,24 @@ const initDB = async () => {
             await pool.query (
                 'ALTER TABLE tasks ADD COLUMN user_id INTEGER REFERENCES users(id)'
             )
+        }
+        const checkPriority = await pool.query(`
+            SELECT column_name FROM information_schema.columns
+            WHERE table_name = 'tasks' AND column_name = 'priority'
+        `);
+        if (checkPriority.rows.length === 0) {
+            await pool.query(
+                "ALTER TABLE tasks ADD COLUMN priority VARCHAR(20) DEFAULT 'medium'"
+            );
+        }
+        const checkCategory = await pool.query(`
+            SELECT column_name FROM information_schema.columns
+            WHERE table_name = 'tasks' AND column_name = 'category'
+        `);
+        if (checkCategory.rows.length === 0) {
+            await pool.query(
+                "ALTER TABLE tasks ADD COLUMN category VARCHAR(50) DEFAULT 'other'"
+            );
         }
        console.log ('база создана');     
     } catch (err) {
