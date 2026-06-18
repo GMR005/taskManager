@@ -30,10 +30,6 @@ td {
   font-size: 14px;
 }
 
-tr:nth-child(even) td {
-  background: #f8faff;
-}
-
 tr:last-child td {
   border-bottom: none;
 }
