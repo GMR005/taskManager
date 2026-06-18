@@ -4,118 +4,168 @@
 
 ![React](https://img.shields.io/badge/React-18-2563eb) ![Node](https://img.shields.io/badge/Node-22-16a34a) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-2563eb) ![Python](https://img.shields.io/badge/Python-3.14-f7c948)
 
+# AI Task Manager
+
+> React + Node.js + PostgreSQL + Python  
+> Управление задачами с автоматическим AI-анализом текста
+
 ---
 
 ## Возможности
 
-- Создание, просмотр, изменение статуса и удаление задач
-- Автоматический анализ текста — определение приоритета и категории
 - Регистрация и вход (JWT)
+- Создание, просмотр, изменение статуса, удаление задач
+- Автоматический AI-анализ — определение приоритета и категории по тексту
+- Цветовая индикация статусов (серая / синяя / белая на синем)
 - Экспорт задач в CSV
 
 ---
 
-## Стек технологий
+## Стек
 
 | Компонент | Технология |
 |-----------|-----------|
 | Frontend | React + Vite |
 | Backend | Node.js + Express |
-| База данных | PostgreSQL |
+| БД | PostgreSQL |
 | AI-анализ | Python + Flask (ключевые слова) |
 | Экспорт | Python |
 
 ---
 
-## Запуск проекта
+## Запуск
 
-### Требования
-- Node.js v22+
-- PostgreSQL 15+
-- Python 3.14+
+Требуется **3 терминала**: Python → Node.js → (опционально Frontend)
 
 ### 1. База данных
+
 ```bash
 psql -U postgres -c "CREATE DATABASE taskmanager;"
-2. Backend
-cd backend
-cp .env.example .env        # отредактируйте пароль
-npm install
-node src/index.js           # порт 5000
-3. Python AI-сервис
+```
+
+Таблицы создаются автоматически при запуске backend.
+
+### 2. Python AI-сервис (порт 5001)
+
+```bash
 cd backend/python_service
 pip install -r requirements.txt
-python app.py               # порт 5001
-4. Frontend
+python app.py
+```
+
+### 3. Backend (порт 5000)
+
+```bash
+cd backend
+cp .env.example .env       # отредактируйте DB_PASSWORD
+npm install
+node src/index.js
+```
+
+### 4. Frontend (порт 5173)
+
+```bash
 cd frontend
 npm install
-npm run dev                 # порт 5173
-5. Экспорт в CSV
+npm run dev
+```
+
+### 5. Экспорт в CSV
+
+```bash
 pip install python-dotenv psycopg2-binary
 python export_tasks.py
-API
-Авторизация
-Метод
-POST
-POST
-Задачи
-Метод
-GET
-POST
-PUT
-DELETE
-AI-анализ
-Метод
-POST
-Пример ответа POST /tasks:
+# Создаст tasks_export_YYYYMMDD_HHMMSS.csv
+```
+
+---
+
+## API
+
+### Auth
+
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `POST` | `/auth/register` | Регистрация |
+| `POST` | `/auth/login` | Вход |
+
+### Tasks
+
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `GET` | `/tasks` | Список задач |
+| `POST` | `/tasks` | Создать задачу |
+| `PUT` | `/tasks/:id` | Обновить статус / приоритет / категорию |
+| `DELETE` | `/tasks/:id` | Удалить задачу |
+
+### Python AI
+
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `POST` | `/analyze` | Анализ текста, возвращает `{ priority, category }` |
+| `GET` | `/health` | Проверка сервиса |
+
+---
+
+## Поля задачи
+
+```
+status:    new | in_progress | done
+priority:  high | medium | low
+category:  business | development | education | personal | other
+```
+
+## Пример
+
+```json
+POST /tasks
+{ "title": "Подготовить презентацию для клиента", "description": "Сделать до пятницы" }
+
+Response:
 {
   "id": 1,
-  "title": "Подготовить презентацию",
-  "description": "Для клиента до пятницы",
+  "title": "Подготовить презентацию для клиента",
+  "description": "Сделать до пятницы",
   "status": "new",
   "priority": "high",
   "category": "business",
   "created_at": "2026-06-11T12:00:00.000Z"
 }
-Статусы: new, in_progress, done  
-Приоритеты: high, medium, low  
-Категории: business, development, education, personal, other
-Структура проекта
+```
+
+---
+
+## Структура
+
+```
 taskManager/
 ├── backend/
 │   ├── src/
-│   │   ├── routes/
-│   │   │   ├── authRoutes.js
-│   │   │   └── tasksRoutes.js
-│   │   ├── middleware/
-│   │   │   └── auth.js
-│   │   ├── db.js
-│   │   └── index.js
+│   │   ├── routes/          # authRoutes.js, tasksRoutes.js
+│   │   ├── middleware/      # auth.js (JWT проверка)
+│   │   ├── db.js            # PostgreSQL + автосоздание таблиц
+│   │   └── index.js         # точка входа
 │   ├── python_service/
-│   │   ├── app.py
+│   │   ├── app.py           # AI-анализ текста
 │   │   └── requirements.txt
 │   ├── .env
 │   └── package.json
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── TaskForm.jsx
-│   │   │   ├── TaskList.jsx
-│   │   │   └── TaskRow.jsx
+│   │   ├── components/      # TaskForm, TaskList, TaskRow
 │   │   ├── App.jsx
 │   │   ├── LoginPage.jsx
 │   │   └── api.js
-│   ├── index.html
 │   ├── vite.config.js
 │   └── package.json
 ├── export_tasks.py
 ├── .gitignore
 └── README.md
-Разработчик
-- GitHub: @GMR005 (https://github.com/GMR005)
+```
 
 ---
 
-## Лицензия
+## Разработчик
 
-MIT
+[@GMR005](https://github.com/GMR005)
+
