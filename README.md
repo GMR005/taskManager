@@ -1,104 +1,62 @@
 # AI Task Manager
 
-> Приложение для управления задачами. React + Node.js + PostgreSQL.
-
-![React](https://img.shields.io/badge/React-18-2563eb) ![Node](https://img.shields.io/badge/Node-22-16a34a) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-2563eb) ![Python](https://img.shields.io/badge/Python-3.14-f7c948)
-
----
-
-## Содержание
-
-- [Возможности](#возможности)
-- [Стек технологий](#стек-технологий)
-- [Установка и запуск](#установка-и-запуск)
-- [API](#api)
-- [Структура проекта](#структура-проекта)
-- [Цветовое оформление](#цветовое-оформление)
-- [Разработчик](#разработчик)
+> React + Node.js + PostgreSQL + Python  
+> Управление задачами с автоматическим AI-анализом текста
 
 ---
 
 ## Возможности
 
-- **Создание задач** — форма с названием и описанием
-- **Просмотр списка** — таблица со всеми задачами
-- **Изменение статуса** — выпадающий список (Новая / Выполняется / Закончена)
-- **Удаление задач** — по клику на ✕
-- **Цветовая индикация** — статусы выделены разными цветами
-- **Экспорт в CSV** — Python-скрипт выгрузки из БД
+- Регистрация и вход (JWT)
+- Создание, просмотр, изменение статуса, удаление задач
+- Автоматический AI-анализ — определение приоритета и категории по тексту
+- Цветовая индикация статусов (серая / синяя / белая на синем)
+- Экспорт задач в CSV
 
 ---
 
-## Стек технологий
+## Стек
 
 | Компонент | Технология |
 |-----------|-----------|
 | Frontend | React + Vite |
 | Backend | Node.js + Express |
-| База данных | PostgreSQL |
-| Экспорт | Python 3.14 |
+| БД | PostgreSQL |
+| AI-анализ | Python + Flask (ключевые слова) |
+| Экспорт | Python |
 
 ---
 
-## Установка и запуск
+## Запуск
 
-### Требования
+Требуется **3 терминала**: Python → Node.js → (опционально Frontend)
 
-- **Node.js** v22+
-- **PostgreSQL** 15+
-- **Python** 3.14+
-
-### 1. Клонирование
-
-```bash
-git clone <https://github.com/GMR005/taskManager>
-cd taskManager
-```
-
-### 2. База данных
-
-Создайте базу данных:
+### 1. База данных
 
 ```bash
 psql -U postgres -c "CREATE DATABASE taskmanager;"
 ```
 
-> [!NOTE]
-> Таблица `tasks` создаётся автоматически при первом запуске backend.
+Таблицы создаются автоматически при запуске backend.
 
-### 3. Backend
+### 2. Python AI-сервис (порт 5001)
+
+```bash
+cd backend/python_service
+pip install -r requirements.txt
+python app.py
+```
+
+### 3. Backend (порт 5000)
 
 ```bash
 cd backend
+cp .env.example .env       # отредактируйте DB_PASSWORD
 npm install
-```
-
-Создайте файл `.env` на основе примера:
-  DB_HOST=localhost
-  DB_PORT=5432
-  DB_USER=postgres
-  DB_PASSWORD=your_password
-  DB_NAME=taskmanager
-  PORT=5000
-
-```bash
-cp .env.example .env
-```
-
-Отредактируйте пароль в `.env`, затем запустите сервер:
-
-```bash
 node src/index.js
 ```
 
-Backend будет доступен на `http://localhost:5000`.
-
-> [!TIP]
-> Сервер создаёт таблицу `tasks` в базе данных автоматически. Проверить можно по адресу `http://localhost:5000/tasks` — должен вернуться пустой массив `[]`.
-
-### 4. Frontend
-
-Откройте новый терминал:
+### 4. Frontend (порт 5173)
 
 ```bash
 cd frontend
@@ -106,157 +64,101 @@ npm install
 npm run dev
 ```
 
-Frontend будет доступен на `http://localhost:5173`.
-
-### 5. Python-скрипт экспорта
-
-Установите зависимости:
+### 5. Экспорт в CSV
 
 ```bash
 pip install python-dotenv psycopg2-binary
-```
-
-Запустите скрипт (из корня проекта):
-
-```bash
 python export_tasks.py
+# Создаст tasks_export_YYYYMMDD_HHMMSS.csv
 ```
-
-Скрипт создаст CSV-файл с именем `tasks_export_YYYYMMDD_HHMMSS.csv`.
-
-> [!IMPORTANT]
-> Backend должен быть запущен, чтобы фронтенд мог отправлять запросы.
 
 ---
 
 ## API
 
+### Auth
+
 | Метод | Путь | Описание |
 |-------|------|---------|
+| `POST` | `/auth/register` | Регистрация |
+| `POST` | `/auth/login` | Вход |
+
+### Tasks
+
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `GET` | `/tasks` | Список задач |
 | `POST` | `/tasks` | Создать задачу |
-| `GET` | `/tasks` | Получить список задач |
-| `PUT` | `/tasks/:id` | Изменить статус задачи |
+| `PUT` | `/tasks/:id` | Обновить статус / приоритет / категорию |
 | `DELETE` | `/tasks/:id` | Удалить задачу |
 
-### Создание задачи
+### Python AI
 
-```http
-POST /tasks
-Content-Type: application/json
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `POST` | `/analyze` | Анализ текста, возвращает `{ priority, category }` |
+| `GET` | `/health` | Проверка сервиса |
 
-{
-  "title": "Изучить React",
-  "description": "Пройти базовый курс"
-}
+---
+
+## Поля задачи
+
+```
+status:    new | in_progress | done
+priority:  high | medium | low
+category:  business | development | education | personal | other
 ```
 
-**Ответ:**
+## Пример
 
 ```json
+POST /tasks
+{ "title": "Подготовить презентацию для клиента", "description": "Сделать до пятницы" }
+
+Response:
 {
   "id": 1,
-  "title": "Изучить React",
-  "description": "Пройти базовый курс",
+  "title": "Подготовить презентацию для клиента",
+  "description": "Сделать до пятницы",
   "status": "new",
+  "priority": "high",
+  "category": "business",
   "created_at": "2026-06-11T12:00:00.000Z"
 }
 ```
 
-### Получение списка
-
-```http
-GET /tasks
-```
-
-**Ответ:**
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Изучить React",
-    "description": "Пройти базовый курс",
-    "status": "new",
-    "created_at": "2026-06-11T12:00:00.000Z"
-  }
-]
-```
-
-### Изменение статуса
-
-```http
-PUT /tasks/1
-Content-Type: application/json
-
-{
-  "status": "done"
-}
-```
-
-Допустимые статусы: `new`, `in_progress`, `done`.
-
-### Удаление задачи
-
-```http
-DELETE /tasks/1
-```
-
 ---
 
-## Структура проекта
+## Структура
 
 ```
 taskManager/
-│
-├── backend/                   # Node.js + Express
+├── backend/
 │   ├── src/
-│   │   ├── routes/
-│   │   │   └── tasks.js       # CRUD-роуты
-│   │   ├── db.js              # Подключение к PostgreSQL + автосоздание таблицы
-│   │   └── index.js           # Точка входа сервера
-│   ├── .env                   # Переменные окружения (в .gitignore)
-│   ├── .env.example           # Пример настроек
+│   │   ├── routes/          # authRoutes.js, tasksRoutes.js
+│   │   ├── middleware/      # auth.js (JWT проверка)
+│   │   ├── db.js            # PostgreSQL + автосоздание таблиц
+│   │   └── index.js         # точка входа
+│   ├── python_service/
+│   │   ├── app.py           # AI-анализ текста
+│   │   └── requirements.txt
+│   ├── .env
 │   └── package.json
-│
-├── frontend/                  # React + Vite
+├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── TaskForm.jsx   # Форма создания задачи
-│   │   │   ├── TaskList.jsx   # Таблица задач
-│   │   │   └── TaskRow.jsx    # Строка таблицы
-│   │   ├── App.jsx            # Главный компонент
-│   │   ├── App.css
-│   │   └── index.css
-│   ├── index.html
+│   │   ├── components/      # TaskForm, TaskList, TaskRow
+│   │   ├── App.jsx
+│   │   ├── LoginPage.jsx
+│   │   └── api.js
 │   ├── vite.config.js
 │   └── package.json
-│
-├── export_tasks.py            # Python-скрипт экспорта в CSV
+├── export_tasks.py
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Цветовое оформление
-
-| Статус | Вид | Цвет |
-|--------|-----|------|
-| **Новая** | Серый текст, белый фон | `#6b7280` |
-| **Выполняется** | Синий текст, голубой фон | `#2563eb` |
-| **Закончена** | Белый текст, синий фон | `#ffffff` на `#2563eb` |
-
-Общий фон страницы — светло-голубой `#f0f4ff`, карточка приложения — белая с тенью.
-
----
-
 ## Разработчик
 
-- GitHub: [@GMR005](https://github.com/GMR005)
-- Проект создан в рамках практического задания "AI Task Manager"
-
----
-
-## Лицензия
-
-MIT
+[@GMR005](https://github.com/GMR005)
