@@ -6,26 +6,12 @@
 
 ---
 
-## Содержание
-
-- [Возможности](#возможности)
-- [Стек технологий](#стек-технологий)
-- [Установка и запуск](#установка-и-запуск)
-- [API](#api)
-- [Структура проекта](#структура-проекта)
-- [Цветовое оформление](#цветовое-оформление)
-- [Разработчик](#разработчик)
-
----
-
 ## Возможности
 
-- **Создание задач** — форма с названием и описанием
-- **Просмотр списка** — таблица со всеми задачами
-- **Изменение статуса** — выпадающий список (Новая / Выполняется / Закончена)
-- **Удаление задач** — по клику на ✕
-- **Цветовая индикация** — статусы выделены разными цветами
-- **Экспорт в CSV** — Python-скрипт выгрузки из БД
+- Создание, просмотр, изменение статуса и удаление задач
+- Автоматический анализ текста — определение приоритета и категории
+- Регистрация и вход (JWT)
+- Экспорт задач в CSV
 
 ---
 
@@ -36,224 +22,97 @@
 | Frontend | React + Vite |
 | Backend | Node.js + Express |
 | База данных | PostgreSQL |
-| Экспорт | Python 3.14 |
+| AI-анализ | Python + Flask (ключевые слова) |
+| Экспорт | Python |
 
 ---
 
-## Установка и запуск
+## Запуск проекта
 
 ### Требования
+- Node.js v22+
+- PostgreSQL 15+
+- Python 3.14+
 
-- **Node.js** v22+
-- **PostgreSQL** 15+
-- **Python** 3.14+
-
-### 1. Клонирование
-
-```bash
-git clone <https://github.com/GMR005/taskManager>
-cd taskManager
-```
-
-### 2. База данных
-
-Создайте базу данных:
-
+### 1. База данных
 ```bash
 psql -U postgres -c "CREATE DATABASE taskmanager;"
-```
-
-> [!NOTE]
-> Таблица `tasks` создаётся автоматически при первом запуске backend.
-
-### 3. Backend
-
-```bash
+2. Backend
 cd backend
+cp .env.example .env        # отредактируйте пароль
 npm install
-```
-
-Создайте файл `.env` на основе примера:
-  DB_HOST=localhost
-  DB_PORT=5432
-  DB_USER=postgres
-  DB_PASSWORD=your_password
-  DB_NAME=taskmanager
-  PORT=5000
-
-```bash
-cp .env.example .env
-```
-
-Отредактируйте пароль в `.env`, затем запустите сервер:
-
-```bash
-node src/index.js
-```
-
-Backend будет доступен на `http://localhost:5000`.
-
-> [!TIP]
-> Сервер создаёт таблицу `tasks` в базе данных автоматически. Проверить можно по адресу `http://localhost:5000/tasks` — должен вернуться пустой массив `[]`.
-
-### 4. Frontend
-
-Откройте новый терминал:
-
-```bash
+node src/index.js           # порт 5000
+3. Python AI-сервис
+cd backend/python_service
+pip install -r requirements.txt
+python app.py               # порт 5001
+4. Frontend
 cd frontend
 npm install
-npm run dev
-```
-
-Frontend будет доступен на `http://localhost:5173`.
-
-### 5. Python-скрипт экспорта
-
-Установите зависимости:
-
-```bash
+npm run dev                 # порт 5173
+5. Экспорт в CSV
 pip install python-dotenv psycopg2-binary
-```
-
-Запустите скрипт (из корня проекта):
-
-```bash
 python export_tasks.py
-```
-
-Скрипт создаст CSV-файл с именем `tasks_export_YYYYMMDD_HHMMSS.csv`.
-
-> [!IMPORTANT]
-> Backend должен быть запущен, чтобы фронтенд мог отправлять запросы.
-
----
-
-## API
-
-| Метод | Путь | Описание |
-|-------|------|---------|
-| `POST` | `/tasks` | Создать задачу |
-| `GET` | `/tasks` | Получить список задач |
-| `PUT` | `/tasks/:id` | Изменить статус задачи |
-| `DELETE` | `/tasks/:id` | Удалить задачу |
-
-### Создание задачи
-
-```http
-POST /tasks
-Content-Type: application/json
-
-{
-  "title": "Изучить React",
-  "description": "Пройти базовый курс"
-}
-```
-
-**Ответ:**
-
-```json
+API
+Авторизация
+Метод
+POST
+POST
+Задачи
+Метод
+GET
+POST
+PUT
+DELETE
+AI-анализ
+Метод
+POST
+Пример ответа POST /tasks:
 {
   "id": 1,
-  "title": "Изучить React",
-  "description": "Пройти базовый курс",
+  "title": "Подготовить презентацию",
+  "description": "Для клиента до пятницы",
   "status": "new",
+  "priority": "high",
+  "category": "business",
   "created_at": "2026-06-11T12:00:00.000Z"
 }
-```
-
-### Получение списка
-
-```http
-GET /tasks
-```
-
-**Ответ:**
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Изучить React",
-    "description": "Пройти базовый курс",
-    "status": "new",
-    "created_at": "2026-06-11T12:00:00.000Z"
-  }
-]
-```
-
-### Изменение статуса
-
-```http
-PUT /tasks/1
-Content-Type: application/json
-
-{
-  "status": "done"
-}
-```
-
-Допустимые статусы: `new`, `in_progress`, `done`.
-
-### Удаление задачи
-
-```http
-DELETE /tasks/1
-```
-
----
-
-## Структура проекта
-
-```
+Статусы: new, in_progress, done  
+Приоритеты: high, medium, low  
+Категории: business, development, education, personal, other
+Структура проекта
 taskManager/
-│
-├── backend/                   # Node.js + Express
+├── backend/
 │   ├── src/
 │   │   ├── routes/
-│   │   │   └── tasks.js       # CRUD-роуты
-│   │   ├── db.js              # Подключение к PostgreSQL + автосоздание таблицы
-│   │   └── index.js           # Точка входа сервера
-│   ├── .env                   # Переменные окружения (в .gitignore)
-│   ├── .env.example           # Пример настроек
+│   │   │   ├── authRoutes.js
+│   │   │   └── tasksRoutes.js
+│   │   ├── middleware/
+│   │   │   └── auth.js
+│   │   ├── db.js
+│   │   └── index.js
+│   ├── python_service/
+│   │   ├── app.py
+│   │   └── requirements.txt
+│   ├── .env
 │   └── package.json
-│
-├── frontend/                  # React + Vite
+├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TaskForm.jsx   # Форма создания задачи
-│   │   │   ├── TaskList.jsx   # Таблица задач
-│   │   │   └── TaskRow.jsx    # Строка таблицы
-│   │   ├── App.jsx            # Главный компонент
-│   │   ├── App.css
-│   │   └── index.css
+│   │   │   ├── TaskForm.jsx
+│   │   │   ├── TaskList.jsx
+│   │   │   └── TaskRow.jsx
+│   │   ├── App.jsx
+│   │   ├── LoginPage.jsx
+│   │   └── api.js
 │   ├── index.html
 │   ├── vite.config.js
 │   └── package.json
-│
-├── export_tasks.py            # Python-скрипт экспорта в CSV
+├── export_tasks.py
 ├── .gitignore
 └── README.md
-```
-
----
-
-## Цветовое оформление
-
-| Статус | Вид | Цвет |
-|--------|-----|------|
-| **Новая** | Серый текст, белый фон | `#6b7280` |
-| **Выполняется** | Синий текст, голубой фон | `#2563eb` |
-| **Закончена** | Белый текст, синий фон | `#ffffff` на `#2563eb` |
-
-Общий фон страницы — светло-голубой `#f0f4ff`, карточка приложения — белая с тенью.
-
----
-
-## Разработчик
-
-- GitHub: [@GMR005](https://github.com/GMR005)
-- Проект создан в рамках практического задания "AI Task Manager"
+Разработчик
+- GitHub: @GMR005 (https://github.com/GMR005)
 
 ---
 
