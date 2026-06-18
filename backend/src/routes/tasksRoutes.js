@@ -33,8 +33,6 @@ router.post ('/', async (req, res) => {
             .catch(err => console.error('analysis error:', err.message));
 
         res.status(201).json(task);
-
-        res.status(201).json(result.rows[0]);
     } catch (err) {
         res.status(500).json({error: err.message})
     }
