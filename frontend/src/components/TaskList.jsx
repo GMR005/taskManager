@@ -24,13 +24,15 @@ export default function TaskList() {
           <tr>
             <th>Название</th>
             <th>Статус</th>
+            <th>Приоритет</th>
+            <th>Категория</th>
             <th>Создана</th>
             <th className="th-x"></th>
           </tr>
         </thead>
         <tbody>
           {tasks.length === 0 ? (
-            <tr><td colSpan={4}>Нет задач</td></tr>
+            <tr><td colSpan={6}>Нет задач</td></tr>
           ) : (
             tasks.map(task => (
               <TaskRow key={task.id} task={task} onUpdate={fetchTasks} />

@@ -30,6 +30,16 @@ export default function TaskRow({ task, onUpdate }) {
           <option value="done">Закончена</option>
         </select>
       </td>
+      <td>
+          <span className={`priority-badge priority-${task.priority || 'medium'}`}>
+              {task.priority === 'high' ? 'Высокий'
+              : task.priority === 'medium' ? 'Средний'
+              : 'Низкий'}
+          </span>
+      </td>
+      <td>
+          <span className="category-badge">{task.category || 'other'}</span>
+      </td>
       <td className="td-date">{new Date(task.created_at).toLocaleDateString()}</td>
       <td className="td-x">
         <button className="delete-btn" onClick={handleDelete}>✕</button>
