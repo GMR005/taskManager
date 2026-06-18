@@ -57,12 +57,18 @@ select option {
   font-weight: 500;
   color: #1f2937;
   font-size: 15px;
+  max-width: 200px;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .task-desc {
   color: #9ca3af;
   font-size: 14px;
+  max-width: 200px;
   margin-top: 2px;
+  overflow-wrap: break-word ;
+  white-space: normal;
 }
 
 .td-date {
