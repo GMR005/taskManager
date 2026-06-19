@@ -1,5 +1,11 @@
 # AI Task Manager
 
+> Приложение для управления задачами. React + Node.js + PostgreSQL.
+
+![React](https://img.shields.io/badge/React-18-2563eb) ![Node](https://img.shields.io/badge/Node-22-16a34a) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-2563eb) ![Python](https://img.shields.io/badge/Python-3.14-f7c948) ![Docker](https://img.shields.io/badge/Docker-✓-2496ed)
+
+# AI Task Manager
+
 > React + Node.js + PostgreSQL + Python  
 > Управление задачами с автоматическим AI-анализом текста
 
@@ -24,14 +30,30 @@
 | БД | PostgreSQL |
 | AI-анализ | Python + Flask (ключевые слова) |
 | Экспорт | Python |
+| Контейнеризация | Docker + Docker Compose |
 
 ---
 
 ## Запуск
 
+### Быстрый старт (Docker)
+
+```bash
+docker compose up --build
+```
+
+Открой [http://localhost:5173](http://localhost:5173)
+
+> Все 4 сервиса (PostgreSQL, Python AI, Backend, Frontend) запускаются автоматически.
+> Данные БД сохраняются в Docker volume `pgdata`.
+
+---
+
+### Ручной запуск
+
 Требуется **3 терминала**: Python → Node.js → (опционально Frontend)
 
-### 1. База данных
+#### 1. База данных
 
 ```bash
 psql -U postgres -c "CREATE DATABASE taskmanager;"
@@ -39,7 +61,7 @@ psql -U postgres -c "CREATE DATABASE taskmanager;"
 
 Таблицы создаются автоматически при запуске backend.
 
-### 2. Python AI-сервис (порт 5001)
+#### 2. Python AI-сервис (порт 5001)
 
 ```bash
 cd backend/python_service
@@ -47,7 +69,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-### 3. Backend (порт 5000)
+#### 3. Backend (порт 5000)
 
 ```bash
 cd backend
@@ -56,7 +78,7 @@ npm install
 node src/index.js
 ```
 
-### 4. Frontend (порт 5173)
+#### 4. Frontend (порт 5173)
 
 ```bash
 cd frontend
@@ -64,7 +86,7 @@ npm install
 npm run dev
 ```
 
-### 5. Экспорт в CSV
+#### 5. Экспорт в CSV
 
 ```bash
 pip install python-dotenv psycopg2-binary
@@ -153,8 +175,16 @@ taskManager/
 │   ├── vite.config.js
 │   └── package.json
 ├── export_tasks.py
+├── docker-compose.yml          # оркестрация всех сервисов
+├── .dockerignore
 ├── .gitignore
-└── README.md
+├── README.md
+├── backend/
+│   └── Dockerfile              # сборка Node.js backend
+├── frontend/
+│   └── Dockerfile              # сборка React frontend
+└── backend/python_service/
+    └── Dockerfile              # сборка Python AI-сервиса
 ```
 
 ---
@@ -162,3 +192,4 @@ taskManager/
 ## Разработчик
 
 [@GMR005](https://github.com/GMR005)
+
