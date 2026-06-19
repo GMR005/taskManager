@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: taskmanager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  python-ai:
+    build: ./backend/python_service
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 1
+      DB_NAME: taskmanager
+      JWT_SECRET: 6f8e9a2c3b1d7e4f5a0c8b9d2e3f4a5b
+      ANALYSIS_URL: http://python-ai:5001/analyze
+    depends_on:
+      - db
+      - python-ai
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
