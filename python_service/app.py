@@ -43,7 +43,7 @@ CATEGORY_RULES = {
         r'учеб', r'курс', r'обучен',            
         r'study', r'learn', r'education',
         r'урок', r'лекци', r'домашк',
-        r'задач', r'экзамен', r'exam',
+        r'задач', r'экзамен', r'exam', r'контрольн',
     ],
     'personal': [
         r'личн', r'дом', r'семь',               

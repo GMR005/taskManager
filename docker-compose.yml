@@ -10,14 +10,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+      
+
   python-ai:
-    build: ./backend/python_service
+    build: ./python_service
     restart: unless-stopped
     ports:
       - "5001:5001"
 
   backend:
     build: ./backend
+    volumes:
+    - ./database/db.js:/app/database/db.js
     restart: unless-stopped
     ports:
       - "5000:5000"

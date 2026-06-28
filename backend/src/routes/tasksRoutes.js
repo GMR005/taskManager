@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const router = Router();
-const {pool} = require('../db');
+const {pool} = require('../../database/db');
 const {auth} = require('../middleware/auth');
 const ANALYSIS_URL = process.env.ANALYSIS_URL;
 
