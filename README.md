@@ -64,7 +64,7 @@ psql -U postgres -c "CREATE DATABASE taskmanager;"
 #### 2. Python AI-сервис (порт 5001)
 
 ```bash
-cd backend/python_service
+cd python_service
 pip install -r requirements.txt
 python app.py
 ```
@@ -159,13 +159,12 @@ taskManager/
 │   ├── src/
 │   │   ├── routes/          # authRoutes.js, tasksRoutes.js
 │   │   ├── middleware/      # auth.js (JWT проверка)
-│   │   ├── db.js            # PostgreSQL + автосоздание таблиц
 │   │   └── index.js         # точка входа
-│   ├── python_service/
-│   │   ├── app.py           # AI-анализ текста
-│   │   └── requirements.txt
 │   ├── .env
-│   └── package.json
+│   ├── package.json
+│   └── Dockerfile
+├── database/
+│   └── db.js                # PostgreSQL + автосоздание таблиц
 ├── frontend/
 │   ├── src/
 │   │   ├── components/      # TaskForm, TaskList, TaskRow
@@ -173,18 +172,17 @@ taskManager/
 │   │   ├── LoginPage.jsx
 │   │   └── api.js
 │   ├── vite.config.js
-│   └── package.json
+│   ├── package.json
+│   └── Dockerfile
+├── python_service/
+│   ├── app.py               # AI-анализ текста
+│   ├── requirements.txt
+│   └── Dockerfile
 ├── export_tasks.py
-├── docker-compose.yml          # оркестрация всех сервисов
+├── docker-compose.yml
 ├── .dockerignore
 ├── .gitignore
-├── README.md
-├── backend/
-│   └── Dockerfile              # сборка Node.js backend
-├── frontend/
-│   └── Dockerfile              # сборка React frontend
-└── backend/python_service/
-    └── Dockerfile              # сборка Python AI-сервиса
+└── README.md
 ```
 
 ---
