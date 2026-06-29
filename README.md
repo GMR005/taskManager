@@ -17,7 +17,8 @@
 - Создание, просмотр, изменение статуса, удаление задач
 - Автоматический AI-анализ — определение приоритета и категории по тексту
 - Цветовая индикация статусов (серая / синяя / белая на синем)
-- Экспорт задач в CSV
+- Экспорт задач в CSV через отдельный export-service
+- Автоматическая категоризация (business, development, education, personal, other)
 
 ---
 
@@ -29,7 +30,7 @@
 | Backend | Node.js + Express |
 | БД | PostgreSQL |
 | AI-анализ | Python + Flask (ключевые слова) |
-| Экспорт | Python |
+| Export Service | Python + Flask |
 | Контейнеризация | Docker + Docker Compose |
 
 ---
@@ -44,7 +45,7 @@ docker compose up --build
 
 Открой [http://localhost:5173](http://localhost:5173)
 
-> Все 4 сервиса (PostgreSQL, Python AI, Backend, Frontend) запускаются автоматически.
+> Все 5 сервисов (PostgreSQL, Python AI, Export Service, Backend, Frontend) запускаются автоматически.
 > Данные БД сохраняются в Docker volume `pgdata`.
 
 ---
@@ -86,12 +87,25 @@ npm install
 npm run dev
 ```
 
-#### 5. Экспорт в CSV
+#### 5. Export Service (порт 5002)
 
+```bash
+cd export_service
+pip install -r requirements.txt
+python app.py
+```
+
+#### 6. Экспорт в CSV
+
+**Через Docker Compose:**
+```bash
+curl http://localhost:5002/export -OJ
+```
+
+**Старый скрипт (без Docker):**
 ```bash
 pip install python-dotenv psycopg2-binary
 python export_tasks.py
-# Создаст tasks_export_YYYYMMDD_HHMMSS.csv
 ```
 
 ---
@@ -119,6 +133,13 @@ python export_tasks.py
 | Метод | Путь | Описание |
 |-------|------|---------|
 | `POST` | `/analyze` | Анализ текста, возвращает `{ priority, category }` |
+| `GET` | `/health` | Проверка сервиса |
+
+### Export Service
+
+| Метод | Путь | Описание |
+|-------|------|---------|
+| `GET` | `/export` | Скачать CSV со всеми задачами |
 | `GET` | `/health` | Проверка сервиса |
 
 ---
@@ -176,6 +197,10 @@ taskManager/
 │   └── Dockerfile
 ├── python_service/
 │   ├── app.py               # AI-анализ текста
+│   ├── requirements.txt
+│   └── Dockerfile
+├── export_service/
+│   ├── app.py               # Экспорт задач в CSV
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── export_tasks.py
