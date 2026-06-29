@@ -18,6 +18,20 @@ services:
     ports:
       - "5001:5001"
 
+  export-service:
+    build: ./export_service
+    restart: unless-stopped
+    ports:
+      - "5002:5002"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: 1
+      DB_NAME: taskmanager
+    depends_on:
+      - db
+
   backend:
     build: ./backend
     volumes:
