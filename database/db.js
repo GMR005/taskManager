@@ -31,35 +31,6 @@ const initDB = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `)
-
-        const check = await pool.query(`
-            SELECT column_name FROM information_schema.columns
-            WHERE table_name = 'tasks' AND column_name = 'user_id'
-        `);
-
-        if (check.rows.length===0) {
-            await pool.query (
-                'ALTER TABLE tasks ADD COLUMN user_id INTEGER REFERENCES users(id)'
-            )
-        }
-        const checkPriority = await pool.query(`
-            SELECT column_name FROM information_schema.columns
-            WHERE table_name = 'tasks' AND column_name = 'priority'
-        `);
-        if (checkPriority.rows.length === 0) {
-            await pool.query(
-                "ALTER TABLE tasks ADD COLUMN priority VARCHAR(20) DEFAULT 'medium'"
-            );
-        }
-        const checkCategory = await pool.query(`
-            SELECT column_name FROM information_schema.columns
-            WHERE table_name = 'tasks' AND column_name = 'category'
-        `);
-        if (checkCategory.rows.length === 0) {
-            await pool.query(
-                "ALTER TABLE tasks ADD COLUMN category VARCHAR(50) DEFAULT 'other'"
-            );
-        }
        console.log ('база создана');     
     } catch (err) {
         console.error('ошибка инициализации бд:', err.message);
